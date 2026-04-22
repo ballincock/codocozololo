@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+   </head>
+   <body>
+      <div class="app">
+         <div class="sidebar">
+            <div class="user-info">
+               <span>User: <b>{{ current_user }}</b></span>
+               <a href="/" style="color: #fff; text-decoration: none;">← Back</a>
+            </div>
+            <div style="padding: 15px;"><input type="text" id="sInput" onkeyup="doSearch()" placeholder="Search..." style="width:100%; background:#fff; color:#333; border:none; padding:8px; border-radius:8px;"></div>
+            <div id="inboxView">
+               {% for chat in inbox %}
+               <a href="{{ url_for('chat_system', receiver=chat.name) }}" class="contact {% if chat.name == receiver %}active{% endif %}">
+               <span>{{ chat.name }}</span>
+               {% if chat.new > 0 %}<span class="badge">NEW {{ chat.new }}</span>{% endif %}
+               </a>
+               {% endfor %}
+            </div>
+            <div id="searchView" style="display:none;"></div>
+         </div>
+         <div class="b" style="display:flex; flex-direction:column;">
+            <div class="r" style="padding:15px 25px; background:rgba(255,255,255,0.05);">Chatting with: <b>{{ receiver }}</b></div>
+            <div class="msg-area" id="chatBox">
+               {% for m in messages %}
+               <div class="bubble {% if m.sender == current_user %}sent{% else %}recv{% endif %}">
+                  {{ m.content }}
+                  {% if m.sender == current_user %}
+                  <span class="del-btn" onclick="deleteMsg({{ m.id }})">×</span>
+                  {% endif %}
+               </div>
+               {% endfor %}
+            </div>
+            <form onsubmit="send(event)" class="input-bar">
+               <input type="text" id="mText" placeholder="Aa" required autocomplete="off">
+               <button type="submit">Send</button>
+            </form>
+         </div>
+      </div>
+      <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+   </body>
+</html>
