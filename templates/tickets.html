@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/tickets.css') }}">
+      <title>Support Tickets</title>
+   </head>
+   <body>
+      <div class="wrapper">
+         <a href="http://localhost:5000" class="back-btn">← Back to Dashboard</a>
+         <h2 style="color:white;">Support Center</h2>
+         <nav style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; display: flex; gap: 10px; align-items: center;">
+            <a href="/tickets" style="color: white; text-decoration: none; padding: 10px; background: #FF69B4; border-radius: 8px;">My Tickets</a>
+            {% if session.get('user_id') == 1 %}
+            <a href="/admin/tickets" style="color: white; text-decoration: none; padding: 10px; background: #ef4444; border-radius: 8px; font-weight: bold;">
+            ⚠️ Admin Panel
+            </a>
+            {% endif %}
+            <span style="font-size: 0.7rem; color: #fff; margin-left: auto;">
+            Logged in ID: {{ session.get('user_id') or 'NONE' }}
+            </span>
+         </nav>
+         <form action="/tickets" method="POST">
+            <input type="text" name="subject" placeholder="Subject / Issue Title" required>
+            <textarea name="message" placeholder="Describe what's wrong..." rows="4" required></textarea>
+            <button type="submit" class="submit-btn">Send Ticket</button>
+         </form>
+         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin-bottom: 20px;">
+         <h3>My Tickets</h3>
+         <div class="ticket-list">
+            {% for t in tickets %}
+            <details>
+               <summary>
+                  {{ t.subject }}
+                  <span class="status-pill">{{ t.status }}</span>
+               </summary>
+               <div class="msg-body">
+                  {{ t.message }}
+                  <div style="margin-top:10px; font-size:0.75rem; color:#fff;">
+                     Sent on: {{ t.created_at }}
+                  </div>
+               </div>
+            </details>
+            {% else %}
+            <p style="text-align:center; color:#fff;">No history found.</p>
+            {% endfor %}
+         </div>
+      </div>
+   </body>
+</html>
