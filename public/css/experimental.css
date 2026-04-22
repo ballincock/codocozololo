@@ -1,0 +1,154 @@
+:root {
+	--purps: #966fd6;
+	--pink: #FF69B4;
+	--bg: #333;
+}
+
+body {
+	background: #333333;
+	color: var(--purps);
+	font-family: 'Courier New', monospace;
+	display: flex;
+	justify-content: center;
+	padding-top: 50px;
+}
+
+.engine-box {
+	overflow-y: scroll;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	margin-top: 3%;
+	top: 23%;
+	background: #252525;
+	padding: 45px;
+	width: 450px;
+	border-radius: 7px;
+	justify-content: center;
+	align-items: center;
+}
+
+/* Step Toggle Row */
+.step-controls {
+	border-radius: 7px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.btn-advance {
+	border-radius: 7px;
+	background: #FF69B4;
+	color: white;
+	border: 1px solid var(--pink);
+	padding: 8px 15px;
+	cursor: pointer;
+	transition: 0.3s;
+	text-transform: uppercase;
+	font-size: 0.8rem;
+}
+
+.btn-advance:hover {
+	border-radius: 7px;
+	background: var(--pink);
+	color: #000;
+	box-shadow: 0 0 15px var(--pink);
+}
+
+.dynamic-grid {
+	overflow-y: scroll;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	border-radius: 7px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 15px;
+	margin-bottom: 20px;
+	min-height: 80px;
+}
+
+.field {
+	overflow-y: scroll;
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+	display: flex;
+	flex-direction: column;
+}
+
+label {
+	font-size: 0.7rem;
+	color: #fff;
+	text-transform: uppercase;
+	margin-bottom: 5px;
+}
+
+input {
+	border-radius: 6px;
+	background: white;
+	border: 1px solid var(--purps);
+	color: #333;
+	padding: 10px;
+	outline: none;
+}
+
+select {
+	border-radius: 6px;
+}
+
+.calc-btn {
+	border-radius: 7px;
+	background: #966fd6;
+	color: white;
+	border: 1px solid var(--purps);
+	width: 100%;
+	padding: 15px;
+	cursor: pointer;
+	font-weight: bold;
+	transition: 0.3s;
+	text-transform: uppercase;
+}
+
+.calc-btn:hover {
+	background: var(--purps);
+	color: #000;
+	box-shadow: 0 0 30px var(--purps);
+}
+
+#terminal {
+	border-radius: 7px;
+	margin-top: 25px;
+	border-top: 1px dashed var(--purps);
+	padding-top: 15px;
+	font-size: 0.85rem;
+	line-height: 1.8;
+	color: #333;
+	min-height: 50px;
+	background: #fff;
+}
+
+@media (max-width: 768px) {
+	.engine-box {
+		align-items: center;
+		justify-content: center;
+		margin-top: 20rem;
+		width: 100%;
+		max-height: 1000px;
+		height: 1000px;
+	}
+
+	label {
+		margin-top: 10rem;
+	}
+
+	input {
+		margin-top: 10rem;
+	}
+
+	select {
+		margin-top: 10rem;
+	}
+
+	#terminal {
+		width: 600%;
+	}
+}
