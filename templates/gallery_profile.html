@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Profile</title>
+      <style>
+         body { background: #333; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; font-family: sans-serif; }
+         #app-frame { width: 95%; max-width: 450px; height: 90vh; background:#252525; border-radius: 25px; overflow: hidden; display: flex; flex-direction: column; border: 4px solid #222; }
+         .header { padding: 20px; background: #FF69B4; color: white; display: flex; justify-content: space-between; align-items: center; }
+         .friends-bar { padding: 10px;color:#fff; background: #252525;  overflow-x: auto; white-space: nowrap; }
+         .grid { clear:both;flex: 1; -ms-overflow-style:none; scrollbar-width:none;overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 5px; }
+      </style>
+   </head>
+   <body>
+      <div id="app-frame">
+         <div id="profile-display">
+            <center><img src="{{ url_for('static', filename='uploads/' + (user['profile_pic'] or 'default.png')) }}" 
+               style="padding:20px;width: 150px; height: 150px; border-radius: 50%; object-fit: cover;"></center>
+            <center>
+               <h2 style="color:white;">{{ user['username']|capitalize }}</h2>
+            </center>
+         </div>
+         <div class="header"><a href="/gallery" style="color:white; text-decoration:none;">← Back</a><strong>@{{ user.username }}</strong><span></span></div>
+         <div style="text-align:center; padding:15px;">
+            <strong>{{ posts|length }}</strong> Posts | <strong>{{ followers }}</strong> Followers
+            {% if is_friend %}<br><span style="color:#27ae60; font-size:12px;">🤝 Mutual Friends</span>{% endif %}
+         </div>
+         {% if uid != session['user_id'] %}
+         <button onclick="follow({{ uid }})" style="width:80%; margin:10px auto; padding:10px; border-radius:20px; border:none; font-weight:bold; cursor:pointer; background: {{ '#95a5a6' if is_following else '#27ae60' }}; color:white;">
+         {{ 'Unfollow' if is_following else 'Follow' }}
+         </button>
+         {% endif %}
+         <div class="friends-bar">
+            <small>Friends: </small>
+            {% for f in friends %}<a href="/galleryprofile/{{ f.id }}" style="text-decoration:none; color:#3498db; font-size:11px; margin-right:8px;">@{{ f.username }}</a>{% endfor %}
+         </div>
+         <div class="grid">
+            {% for p in posts %}
+            <div style="position:relative;">
+               <img src="{{ url_for('static', filename=p.image_path) }}" style="width:100%; aspect-ratio:1; object-fit:cover; border-radius:10px;">
+               {% if uid == session['user_id'] %}<button onclick="delPost({{ p.id }})" style="position:absolute; top:5px; right:5px; background:red; color:white; border:none; border-radius:5px; font-size:10px; cursor:pointer;">Delete</button>{% endif %}
+            </div>
+            {% endfor %}
+         </div>
+      </div>
+      <script>
+         async function follow(u) { await fetch(`/api/social/follow/${u}`, {method:'POST'}); location.reload(); }
+         async function delPost(p) { if(confirm("Delete?")) { await fetch(`/api/gallery/delete/${p}`, {method:'POST'}); location.reload(); } }
+      </script>
+   </body>
+</html>
