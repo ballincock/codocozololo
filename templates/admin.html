@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head><title>Admin</title></head>
+<style> 
+body {
+	background-color: #333;
+}
+
+.grid-btn {
+	aspect-ratio: 4 / 2;
+	background: #FF69B4;
+	border: 1px solid #FF69B4;
+	border-radius: 5px;
+	color: white;
+	font-weight: bold;
+	cursor: pointer;
+	font-size: 0.85rem;
+	transition: all 0.3s ease;
+	display: flex-row;
+	align-items: center;
+	justify-content: center;
+}
+</style>
+<body style="color:white; font-family:sans-serif; background:#333; padding:20px;">
+    <div style="max-width:600px; margin:auto; background:#252525; padding:20px; border-radius:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+        <h2>Moderation Queue</h2>
+        {% for r in reports %}
+        <div style="border-bottom:1px solid #eee; padding:15px 0;">
+            <strong>{{ r.target_type }} #{{ r.target_id }}</strong><br>
+            <small>By: @{{ r.username }} | Reason: {{ r.reason }}</small><br><br>
+            <button onclick="res({{ r.id }}, 'ignore')" class="grid-btn">Ignore</button>
+            <button onclick="res({{ r.id }}, 'delete', '{{ r.target_type }}', {{ r.target_id }})" style="color:white;" class="grid-btn">Delete</button>
+        </div>
+        {% endfor %}
+    </div>
+    <script>
+        async function res(rid, act, typ='', tid=0) {
+            await fetch('/api/admin/resolve', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({report_id:rid, action:act, type:typ, target_id:tid})});
+            location.reload();
+        }
+    </script>
+</body>
+</html>
