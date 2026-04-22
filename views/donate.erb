@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Donations</title>
+      <link rel="stylesheet" href="./public/css/donate.css">
+   </head>
+   <body>
+      <div class="glass-container">
+         <div class="scroll-content">
+            <header>
+               <h1 style="font-size:26px;">Donate to TurtleStew</h1>
+               <a href="http://localhost:5000" style="color:white; text-decoration:none;" >← Back to Dashboard</a>
+            </header>
+            <section class="content-block">
+               <p>TurtleStew is an independent owned and operated platform, intended to keep a wide variety of services in a concentrated, user-friendly area, to make the more nuanced side of fishing and related fields accessible and free to all.</p>
+            </section>
+            <section class="content-block" style="border-left-color: #966fd6;">
+               <p>It is maintained and developed entirely within the free time constraints of the creator, and while this is their passion and they would love nothing more than to continue developing the platform, it is an unfortunate truth that at least a little money is needed to keep the gears turning. While the owner has a job, it is a minimum wage endeavor that isn't entirely able to keep the lights on.</p>
+            </section>
+            <section class="content-block">
+               <p>Below is a button linked to the owners patreon page, to facilitate optional donations at the agency of the user. This platform is free and forever intends to be so, but any and all donations help ensure this reality in the following years. Thank you so much, and we hope you continue to enjoy the platform we are seeking to provide for you.</p>
+            </section>
+            <div class="donate-wrapper">
+               <button class="btn-donate">DONATE NOW</button>
+            </div>
+         </div>
+      </div>
+      <a href="{{ url_for('view_user_support_tickets') }}" class="support-button">
+      <span class="icon">💬</span> Support
+      </a>
+      <div class="embedded-footer-row">
+         <div class="license-text">
+            &copy; 2026 TurtleStew <br>
+            <a href="https://gnu.org" target="_blank">GNU GPLv3</a>
+         </div>
+         <a href="{{ url_for('donate_redirect') }}" class="donate-btn">Donate</a>
+      </div>
+      <div class="turtlestew-tag">turtlestew</div>
+      <div id="modal" class="modal-overlay">
+         <div class="centered-div" id="modal-content"></div>
+      </div>
+   </body>
+</html>
