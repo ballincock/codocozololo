@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>PyRB Fishing Database</title>
+      <link rel="stylesheet" 
+         href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
+         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
+         crossorigin="" />
+      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
+         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
+         crossorigin=""></script>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
+   </head>
+   <body>
+      <div class="alpha-tag">Alpha 0.1.9</div>
+      <div id="app-frame">
+         <div id="sidebar">
+            <div class="sidebar-header">
+               <a href="/" style="display: inline-block; color: #ecf0f1; text-decoration: none; font-size: 14px; margin-bottom: 10px;">
+               ← Back to Home
+               </a>
+               <h4 style="margin:0 0 10px 0">Fishing Spots</h4>
+               <input type="text" id="search" placeholder="Search logs..." onkeyup="filterPins()">
+            </div>
+            <div id="list-render"></div>
+         </div>
+         <div id="map-container">
+            <div id="map"></div>
+            <div id="add-form">
+               <h4 style="margin:0 0 10px 0">Log Catch</h4>
+               <input type="text" id="loc_name" placeholder="Location Name">
+               <input type="text" id="species" placeholder="Fish Species">
+               <input type="text" id="season" placeholder="Season">
+               <input type="text" id="time" placeholder="Time of Day">
+               <input type="text" id="lure" placeholder="Lure Used">
+               <button class="btn-save" onclick="saveNewPin()">Save Pin</button>
+               <button onclick="closeForm()" style="width:100%; border:none; background:none; color:gray; margin-top:5px; cursor:pointer;">Cancel</button>
+            </div>
+         </div>
+      </div>
+      <br><a href="#" class="support-button">
+      <span class="icon">💬</span> Support
+      </a>
+      <div class="embedded-footer-row">
+         <div class="license-text">
+            &copy; 2026 TurtleStew <br>
+            <a href="https://gnu.org" target="_blank">GNU GPLv3</a>
+         </div>
+         <a href="/donate" class="donate-btn">Donate</a>
+      </div>
+      <div class="turtlestew-tag">turtlestew</div>
+      <script src="{{ url_for('static', filename='js/map.js') }}"></script>
+   </body>
+</html>
