@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>PyRB Gallery</title>
+      <style>
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/gallery.css') }}">
+      </style>
+   </head>
+   <body>
+      <div id="app-frame" style="border-radius:7px;">
+         <div class="header" style="border-radius: 8px;">
+            <a href="/" style="color:white; text-decoration:none; font-size:12px;">← Home</a>
+            <strong>Image Gallery</strong>
+            <div style="display:flex; gap:10px;">
+               {% if session.get('user_id') == 1 %}<a href="/admin/panel" style="color:orange; font-size:10px; text-decoration:none;">ADMIN</a>{% endif %}
+               <a href="/galleryprofile/{{ session['user_id'] }}" style="color:white; text-decoration:none;">👤</a>
+            </div>
+         </div>
+         <div class="h-scroll-container" style="border-radius:8px;">
+            <button class="side-btn" id="prev" onclick="move(-1)">&#10094;</button>
+            <div class="h-viewport" id="viewport">
+               {% for post in posts %}
+               <div class="slide">
+                  <img src="{{ url_for('static', filename=post.image_path) }}">
+                  <div class="overlay">
+                     <a href="/galleryprofile/{{ post.user_id }}" style="color:#3498db; text-decoration:none; font-weight:bold;">@{{ post.username }}</a>
+                     <div class="tag-row">
+                        {% if post.species %}<span class="tag">🐟 {{ post.species }}</span>{% endif %}
+                        {% if post.spot_name %}<span class="tag">📍 {{ post.spot_name }}</span>{% endif %}
+                        {% if post.lure_used %}<span class="tag">🪝 {{ post.lure_used }}</span>{% endif %}
+                     </div>
+                     <div style="display:flex; gap:15px; margin-top:10px;">
+                        <button onclick="vote({{ post.id }}, 'post', 1)" style="background:none; border:none; color:white; cursor:pointer;">👍 {{ post.score or 0 }}</button>
+                        <button onclick="openComments({{ post.id }})" style="background:none; border:none; color:white; cursor:pointer;">💬 Comments</button>
+                     </div>
+                  </div>
+               </div>
+               {% endfor %}
+            </div>
+            <button class="side-btn" id="next" onclick="move(1)">&#10095;</button>
+         </div>
+         <div style="padding:10px;color:#fff; background:#252525;border-radius: 8px; ">
+            <form action="/api/gallery/upload" method="POST" enctype="multipart/form-data">
+               <input type="file" name="image" required style="color:white;padding:3px;border:none;font-size: 10px; width: 100%;border-radius:6px;">
+               <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; margin-top:5px;">
+                  <input type="text" name="species" placeholder="Fish" style="font-size:11px;">
+                  <input type="text" name="spot" placeholder="Spot" style="font-size:11px;">
+                  <input type="text" name="lure" placeholder="Lure" style="font-size:11px;">
+                  <input type="text" name="season" placeholder="Season" style="font-size:11px;">
+                  <input type="text" name="time" placeholder="Time" style="font-size:11px; grid-column: span 2;">
+               </div>
+               <button type="submit" style="width:100%; background:#966fd6; color:white; border:none; padding:8px; border-radius:8px; margin-top:5px; font-weight:bold;">Post Catch</button>
+            </form>
+            <center>
+               <div class="sort-menu" style="margin-top:1rem;padding:5px; align-items:center;">
+                  <a href="{{ url_for('gallery', sort='new') }}" style="width:6rem;">Newest</a>
+                  <a href="{{ url_for('gallery', sort='top') }}">Top Rated</a>
+                  <a href="{{ url_for('gallery', sort='random') }}">Shuffle</a>
+               </div>
+            </center>
+         </div>
+      </div>
+      <div id="c-drawer">
+         <div style="display:flex; justify-content:space-between;"><strong>Comments</strong><button onclick="document.getElementById('c-drawer').style.display='none'" style="border:none; background:none; font-size:20px;">×</button></div>
+         <div id="c-list" style="flex:1; overflow-y:auto; padding:10px 0;"></div>
+         <input type="text" id="c-input" placeholder="Add a comment..." style="width:100%; padding:10px; border-radius:10px;">
+         <button onclick="sendComment()" style="width:100%; background:#27ae60; color:white; border:none; padding:10px; border-radius:8px; margin-top:5px;">Post</button>
+      </div>
+      <script src="{{ url_for('static', filename='js/gallery.js') }}"></script>
+   </body>
+</html>
