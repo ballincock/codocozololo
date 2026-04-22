@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./public/css/style.css">
+<body id="main-bg">
+    <div class="glass-player">
+        <h2 id="display-title">Loading...</h2>
+        <audio id="audio-ctrl" controls style="width: 100%;"></audio><br>
+
+        <button class="conch-btn" onclick="askConch()">🐚 Consult the Magic Conch</button><br>
+        <br><br><a href="http://localhost:5000/"style="color:white; text-decoration:none;" >← Back to Dashboard</a>
+    </div>
+
+    <div id="conchModal">
+        <div class="modal-content">
+            <h3 id="conchMessage">Consulting...</h3>
+            <button class="close-modal" onclick="closeConch()">Close</button>
+        </div>
+    </div>
+
+    <script src="./public/js/player.js">
+</body>
+</html>
