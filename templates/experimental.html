@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <script src="{{ url_for('static', filename='css/experimental.css') }}"></script>
+   </head>
+   <body>
+      <div class="engine-box">
+         <div class="form-container">
+            <div class="step-controls">
+               <button class="btn-advance"onclick="advanceStep()">+1 STEP</button><a href="{{ url_for('index') }}"style="color:white; text-decoration:none;" >← Back to Dashboard</a>
+               <span style="font-size: 0.8rem; color: #fff;">STEP: <span id="step-ui" style="color: var(--neon-blue);">1</span></span>
+            </div>
+            <label>Module Selection</label>
+            <select id="step-select" onchange="jumpToStep()">
+               <option value="1">1: PIPE CAPACITY</option>
+               <option value="2">2: POND VOLUME</option>
+               <option value="3">3: V-NOTCH WEIR</option>
+               <option value="4">4: INFILTRATION RATE</option>
+               <option value="5">5: QUICK RUNOFF</option>
+               <option value="6">6: ORIFICE FLOW</option>
+               <option value="7">7: TIME OF CONCENTRATION</option>
+               <option value="8">8: NRCS RUNOFF DEPTH</option>
+               <option value="9">9: DITCH CAPACITY</option>
+               <option value="10">10: RIPRAP SIZING</option>
+               <option value="11">11: EST. DETENTION STORAGE</option>
+               <option value="12">12: CURB INLET CAPACITY</option>
+               <option value="13">13: PIPE EXIT VELOCITY</option>
+               <option value="14">14: SEDIMENT BASIN AREA</option>
+               <option value="15">15: COMPOSITE ROUGHNESS</option>
+               <option value="16">16: TOTAL RUNOFF VOL</option>
+               <option value="17">17: RECTANGULAR WEIR</option>
+               <option value="18">18: GRATE INLET CAPACITY</option>
+               <option value="19">19: PARTIAL PIPE FLOW</option>
+               <option value="20">20: WATER QUALITY VOL</option>
+               <option value="21">21: GUTTER SPREAD</option>
+               <option value="22">22: ANNUAL SOIL LOSS</option>
+               <option value="23">23: CULVERT HEADWATER</option>
+               <option value="24">24: SHEET FLOW Tc</option>
+               <option value="25">25: PRESSURE PIPE LOSS</option>
+               <option value="26">26: SWALE SHEAR STRESS</option>
+               <option value="27">27: PUMP HORSEPOWER</option>
+            </select>
+         </div>
+         <div id="dynamic-grid" class="dynamic-grid"></div>
+         <div id="inputs-container">
+            <!-- JavaScript will dynamically inject fields here -->
+         </div>
+         <button onclick="calculateNow()" class="calc-btn">RUN CALCULATION</button>
+         <!-- Keep your existing buttons and terminal below it -->
+         <div id="terminal">>> READY</div>
+      </div>
+      </div>
+      <script src="{{ url_for('static', filename='js/experimental.js') }}"></script>
+   </body>
+</html>
