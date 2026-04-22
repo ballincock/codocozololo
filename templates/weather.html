@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Weather Widget</title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='css/weather.css') }}">
+   </head>
+   <body class="{{ bg_class }}">
+      <div class="widget-card">
+         {% if weather %}
+         <div class="city-name">{{ weather.city }}</div>
+         <img class="main-icon" 
+            src="{{ url_for('static', filename='icons/' + weather.icon + '.svg') }}" 
+            alt="weather icon">
+         <div class="main-temp">{{ weather.temp }}°</div>
+         <div class="description">{{ weather.desc }}</div>
+         <div class="forecast-container">
+            {% for entry in forecast %}
+            <div class="forecast-item">
+               <div class="forecast-time">{{ entry.time }}</div>
+               <img class="mini-icon" 
+                  src="{{ url_for('static', filename='icons/' + entry.icon + '.svg') }}" 
+                  alt="icon">
+               <div class="forecast-temp">{{ entry.temp }}°</div>
+            </div>
+            {% endfor %}
+         </div>
+         {% else %}
+         <div class="city-name">Oops!</div>
+         <p>We couldn't find the weather for your location.</p>
+         {% endif %}
+         <a href="{{ url_for('index') }}" class="back-btn">← Back to Dashboard</a>
+      </div>
+   </body>
+</html>
