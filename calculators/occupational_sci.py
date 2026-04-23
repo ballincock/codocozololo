@@ -345,6 +345,67 @@ class OccupationalEngine:
                         f">> RESULT: {horsepower:.2f} HP"
                     ]
                     
+            if step == 28:
+                v1 = float(data.get('v1', 0) or 0)
+                v2 = float(data.get('v2', 0) or 0)
+                angle_i = float(data.get('angle_i', 0) or 0)
+    
+                if v1 > 0 and v2 > 0:
+                    sin_r = (v2 / v1) * math.sin(math.radians(angle_i))
+                    if -1 <= sin_r <= 1:
+                        angle_r = math.degrees(math.asin(sin_r))
+                        return [f">> MODULE: SEISMIC REFRACTION", f">> REFRACTED ANGLE: {angle_r:.2f}°"]
+                    return [f">> MODULE: SEISMIC REFRACTION", f">> RESULT: Total Internal Reflection"]
+                    
+            if step == 29:
+                k = float(data.get('k_perm', 0) or 0)
+                a = float(data.get('area', 0) or 0)
+                i = float(data.get('h_grad', 0) or 0)
+                discharge = k * i * a
+                return [f">> MODULE: DARCY'S LAW", f">> DISCHARGE (Q): {discharge:.3f} m³/day"]
+
+            if step == 30:
+                z = float(data.get('depth_m', 0) or 0)
+                rho = float(data.get('rho_rock', 0) or 0)
+                g = 9.81
+                pressure_pa = rho * g * z
+                pressure_mpa = pressure_pa / 10**6
+                return [f">> MODULE: LITHOSTATIC PRESSURE", f">> PRESSURE: {pressure_mpa:.2f} MPa"]
+
+            if step == 33:
+                dist = float(data.get('dist_km', 0) or 0)
+                age = float(data.get('crust_age', 0) or 0)
+                if dist > 0 and age > 0:
+                    rate = (dist / age) / 10 
+                    return [f">> MODULE: TECTONIC SPREADING", f">> RATE: {rate:.2f} cm/year"]
+
+            if step == 34:
+                obs_g = float(data.get('observed_g', 0) or 0)
+                h = float(data.get('elev_m', 0) or 0)
+                rho = float(data.get('rho_crust', 2670) or 2670)
+                bc = 0.00004193 * rho * h
+                fac = 0.3086 * h
+                return [f">> MODULE: GRAVITY ANOMALY", f">> TOTAL CORRECTION: {(fac - bc):.2f} mGal"]
+
+            if step == 35:
+                p_gpa = float(data.get('pressure_gpa', 0) or 0)
+                rho = float(data.get('avg_rho', 2800) or 2800)
+                if p_gpa > 0:
+                    depth_m = (p_gpa * 10**9) / (rho * 9.81)
+                    depth_km = depth_m / 1000
+                    return [f">> MODULE: MAGMA DEPTH", f">> CALCULATED DEPTH: {depth_km:.2f} km"]
+
+            if step == 36:
+                m = float(data.get('mag', 0) or 0)
+                energy_joules = 10**(4.8 + 1.5 * m)
+                return [f">> MODULE: SEISMIC ENERGY", f">> ENERGY: {energy_joules:.2e} Joules"]
+
+            if step == 37:
+                d10 = float(data.get('d10_mm', 0) or 0)
+                c = float(data.get('c_factor', 10) or 10)
+                k = c * (d10 ** 2)
+                return [f">> MODULE: HYDRAULIC COND.", f">> K-VALUE: {k:.3f} cm/s"]
+                    
         return [">> ERROR: BRANCH NOT FOUND"]
 
 @occupational_sci.route('/get_fields')
@@ -476,8 +537,52 @@ def get_fields():
             return jsonify([
                 {"id": "hp_flow_gpm", "label": "Flow Rate (GPM)", "type": "number", "default": 100},
                 {"id": "hp_head_ft", "label": "Total Dynamic Head (Ft)", "type": "number", "default": 50},
-                {"id": "hp_eff", "label": "Pump Efficiency (0.1 - 0.9)", "type": "number", "default": 0.75}])
-
+                {"id": "hp_eff", "label": "Pump Efficiency (0.1 - 0.9)", "type": "number", "default": 0.75}])\
+        if step == 28:
+            return [
+                {"id": "v1", "label": "Velocity Layer 1 (m/s)", "type": "number", "default": 1500},
+                {"id": "v2", "label": "Velocity Layer 2 (m/s)", "type": "number", "default": 2500},
+                {"id": "angle_i", "label": "Incident Angle (degrees)", "type": "number", "default": 30}]
+        if step == 29:
+            return [
+                {"id": "k_perm", "label": "Permeability (m/day)", "type": "number", "default": 10},
+                {"id": "area", "label": "Cross Sectional Area (m²)", "type": "number", "default": 50},
+                {"id": "h_grad", "label": "Hydraulic Gradient (dh/dl)", "type": "number", "default": 0.05}]
+        if step == 30:
+            return [
+                {"id": "depth_m", "label": "Depth (meters)", "type": "number", "default": 1000},
+                {"id": "rho_rock", "label": "Rock Density (kg/m³)", "type": "number", "default": 2700}]
+        if step == 31:
+            return [
+                {"id": "grain_d", "label": "Grain Diameter (mm)", "type": "number", "default": 0.2},
+                {"id": "rho_p", "label": "Particle Density (kg/m³)", "type": "number", "default": 2650},
+                {"id": "fluid_visc", "label": "Fluid Viscosity (Pa·s)", "type": "number", "default": 0.001}]
+        if step == 32:
+            return [
+                {"id": "parent_now", "label": "Parent Isotope (Atoms)", "type": "number", "default": 50},
+                {"id": "daughter_now", "label": "Daughter Isotope (Atoms)", "type": "number", "default": 50},
+                {"id": "half_life", "label": "Half-Life (Years)", "type": "number", "default": 1300000000}]
+        if step == 33:
+            return [
+                {"id": "dist_km", "label": "Distance from Ridge (km)", "type": "number", "default": 100},
+                {"id": "crust_age", "label": "Age of Crust (Million Years)", "type": "number", "default": 5}]
+        if step == 34:
+            return [
+                {"id": "observed_g", "label": "Observed Gravity (mGal)", "type": "number", "default": 980.12},
+                {"id": "elev_m", "label": "Elevation (meters)", "type": "number", "default": 500},
+                {"id": "rho_crust", "label": "Average Density (kg/m³)", "type": "number", "default": 2670}]
+        if step == 35:
+            return [
+                {"id": "pressure_gpa", "label": "Crystallization Pressure (GPa)", "type": "number", "default": 0.5},
+                {"id": "avg_rho", "label": "Overburden Density (kg/m³)", "type": "number", "default": 2800}]
+        if step == 36:
+            return [
+                {"id": "mag", "label": "Richter Magnitude (M)", "type": "number", "default": 6.0}]
+        if step == 37:
+            return [
+                {"id": "d10_mm", "label": "Effective Grain Size (D10 in mm)", "type": "number", "default": 0.5},
+                {"id": "c_factor", "label": "Hazen Coefficient (C)", "type": "number", "default": 10}]
+    
     return jsonify([])
 
 @occupational_sci.route('/run_calculation', methods=['POST'])
